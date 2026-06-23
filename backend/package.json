@@ -1,0 +1,34 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.js",
+    "seed": "npx sequelize-cli db:seed:all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "joi": "^18.1.2",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
+    "mysql2": "^3.22.3",
+    "ngrok": "^5.0.0-beta.2",
+    "nodemailer": "^8.0.7",
+    "nodemon": "^3.1.14",
+    "razorpay": "^2.9.6",
+    "react-toastify": "^11.1.0",
+    "sequelize": "^6.37.8",
+    "sequelize-cli": "^6.6.5",
+    "socket.io": "^4.8.3",
+    "stripe": "^22.1.1"
+  }
+}

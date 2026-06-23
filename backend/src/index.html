@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Razorpay</title>
+</head>
+<body>
+
+<button onclick="payNow()">
+  Pay Now
+</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+async function payNow() {
+
+  try {
+
+    console.log("STEP 1 -> CREATE ORDER API");
+
+    const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NzkwMzE5MDgsImV4cCI6MTc3OTAzNTUwOH0.gxilFK3OblLqPfRRLYI-3pRlcaTpukqVjaXSZcdTV4U";
+
+    const response = await fetch(
+      "http://localhost:1000/api/v1/payment/create",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+
+        body: JSON.stringify({
+          order_id: 10
+        })
+      }
+    );
+
+    console.log("CREATE API RESPONSE", response);
+
+    const data = await response.json();
+
+    console.log("CREATE API DATA", data);
+
+    const order = data.data.order;
+
+    console.log("ORDER", order);
+
+    // OPEN RAZORPAY
+    const options = {
+
+      key: "rzp_test_Sq5ceYOXmHiXWg",
+
+      amount: order.amount,
+
+      currency: order.currency,
+
+      order_id: order.id,
+
+      name: "My Ecommerce",
+
+      description: "Order Payment",
+
+      handler: async function (response) {
+
+        try {
+
+          console.log("PAYMENT SUCCESS RESPONSE");
+
+          console.log(response);
+
+          console.log(
+            "STEP 2 -> VERIFY PAYMENT API"
+          );
+
+          const verifyResponse = await fetch(
+            "https://kerosene-laziness-manager.ngrok-free.dev/api/v1/payment/verify",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                "application/json"
+              },
+
+              body: JSON.stringify(response)
+            }
+          );
+
+          console.log(
+            "VERIFY RESPONSE",
+            verifyResponse
+          );
+
+          const verifyData =
+          await verifyResponse.json();
+
+          console.log(
+            "VERIFY DATA",
+            verifyData
+          );
+
+          alert(verifyData.message);
+
+        } catch (error) {
+
+          console.log(
+            "VERIFY ERROR",
+            error
+          );
+
+        }
+
+      },
+
+      modal: {
+
+        ondismiss: function () {
+
+          console.log(
+            "PAYMENT POPUP CLOSED"
+          );
+
+        }
+
+      },
+
+      theme: {
+        color: "#3399cc"
+      }
+
+    };
+
+    console.log("OPENING RAZORPAY");
+
+    const rzp1 = new Razorpay(options);
+
+    rzp1.open();
+
+  } catch (error) {
+
+    console.log("MAIN ERROR", error);
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
